@@ -45,7 +45,7 @@ export const constantRouterMap = [
     name: '锁屏页',
     component: () => import('@/views/common/lock')
   },
-  // 报表
+  // 监控界面
   {
     path: '/dashboard',
     component: Layout,
@@ -56,6 +56,22 @@ export const constantRouterMap = [
         name: 'dashboard',
         component: () => import('@/views/dashboard/dashboard'),
         meta: { title: 'dashboard', icon: 'dashboard' }
+      }
+    ]
+  },
+  // 学生信息
+  {
+    path: '/student',
+    component: Layout,
+    name: 'student',
+    redirect: '/student/student',
+    meta: { title: 'student', icon: 'student' },
+    children: [
+      {
+        path: 'student',
+        name: 'student',
+        component: () => import('@/views/student/student'),
+        meta: { title: 'student', icon: 'student' }
       }
     ]
   }
