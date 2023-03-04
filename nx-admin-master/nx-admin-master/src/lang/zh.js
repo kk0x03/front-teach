@@ -50,6 +50,7 @@ export default {
     treeMen: '树形菜单',
     backToTop: '返回顶部',
     dashboard: '首页',
+    student: '考生信息',
     DiscountFigure: '折线图',
     columnar: '柱状图',
     treeMenu: '树形菜单',

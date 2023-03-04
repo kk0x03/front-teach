@@ -13,6 +13,7 @@
       <div class='splitClass' @click='splitVideo(1,1)' style='background-color: #ff7e23;'>1</div>
       <div class='splitClass' @click='splitVideo(2,2)' style='background-color: #00d8cb;'>4</div>
       <div class='splitClass' @click='splitVideo(3,3)' style='background-color: #681bb7;'>9</div>
+      <div>网速:{{ network }}KB/sec</div>
     </div>
   </div>
 </template>
@@ -25,7 +26,11 @@ export default {
       rows:[1],
       cols:[24],
       currentIndex:[0,0],
+      network:'',
     }
+  },
+  created: function () {//这里是定时器
+    setInterval(this.measureBW, 1000);
   },
   methods: {
     splitVideo(row,col) {
@@ -41,6 +46,10 @@ export default {
     setCurrent(row,col){
       this.currentIndex=[row,col];
     },
+    measureBW () {
+      this.network=navigator.connection.downlink * 1024 /8;   //单位为KB/sec
+      console.log(this.network)
+    }
   }
 }
 </script>
