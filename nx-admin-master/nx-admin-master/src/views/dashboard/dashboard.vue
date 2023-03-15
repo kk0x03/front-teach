@@ -9,11 +9,16 @@
           </div>
       </div>
     </div>
-    <div style="display: flex;">
+    <div class="buttom_menu" stlye="flex">
+      <div class="video_button" style="display: flex;float:left;">
       <div class='splitClass' @click='splitVideo(1,1)' style='background-color: #ff7e23;'>1</div>
       <div class='splitClass' @click='splitVideo(2,2)' style='background-color: #00d8cb;'>4</div>
       <div class='splitClass' @click='splitVideo(3,3)' style='background-color: #681bb7;'>9</div>
-      <div>网速:{{ network }}KB/sec</div>
+    </div>
+    <div style="float:right;margin-right:20px;">
+      <div>带宽:{{ network }}KB/sec</div>
+      <div> 内存使用率:{{ usage }}%</div>
+    </div>
     </div>
   </div>
 </template>
@@ -27,10 +32,14 @@ export default {
       cols:[24],
       currentIndex:[0,0],
       network:'',
+      usage:'',
     }
   },
   created: function () {//这里是定时器
     setInterval(this.measureBW, 1000);
+  },
+  mounted(){
+    this.reciveVedio();
   },
   methods: {
     splitVideo(row,col) {
@@ -48,8 +57,35 @@ export default {
     },
     measureBW () {
       this.network=navigator.connection.downlink * 1024 /8;   //单位为KB/sec
-      console.log(this.network)
+    },
+    reciveVedio(){
+      var WebSocketServer = require('ws').Server;
+      var ws = require('ws');
+      var wss = new WebSocketServer({ port: 8080 });
+      // Listen for connections
+      wss.on('connection', (socket) => {
+
+        ws.on('message', function message(data) {
+          console.log('received: %s', data);
+        });
+        // Handle incoming messages
+        socket.onmessage = (msg) => {
+          let track = msg.data;
+
+          let stream = new MediaStream(track);
+          var video = document.querySelector("video");
+          video.src=stream;
+          video.play();
+          // wss.clients.forEach(function each(client){
+          //   if (client !== socket && client.readyState === WebSocket.OPEN) {
+          //     client.send(JSON.stringify(stream)
+          //         );
+          //   }
+          // });
+        }
+      });
     }
+
   }
 }
 </script>
